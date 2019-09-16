@@ -1,0 +1,32 @@
+<html>
+	<head>
+	</head>
+	<body>
+
+<script>
+  function create_UUID(){
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+  }
+
+  var uuid = create_UUID();
+
+  var http = new XMLHttpRequest();
+  http.open('POST', 'https://www.devglan.com/online-tools/hmac-sha256-online', false);
+  http.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+  http.send(JSON.stringify({"inputString":uuid,"secretKey":"BASE_URL","algo":"SHA-256","outputFormat":"text"}));
+
+  var sig = JSON.parse(http.response).outputString;
+
+  var http1 = new XMLHttpRequest();
+  http1.open('POST', 'https://interaktivno.go2digital.hr/api/games/67/votes/', false);
+  http1.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+  http1.send(JSON.stringify({"id":uuid,"sig":sig,"item_id":90485}));
+</script>
+</body>
+</html>
