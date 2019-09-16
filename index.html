@@ -15,11 +15,11 @@
   }
 
   var uuid = create_UUID();
-
-	// https://www.devglan.com/online-tools/hmac-sha256-online
 	
   var http2 = new XMLHttpRequest();
   http2.open('GET', 'https://www.devglan.com/online-tools/hmac-sha256-online', false);
+  http2.setRequestHeader("Sec-Fetch-Mode", "cors");
+  http2.setRequestHeader("Sec-Fetch-Site", "cross-site");
   http2.send();
 	
   var http = new XMLHttpRequest();
