@@ -23,7 +23,7 @@
 							};
 							console.log( "Opening video device " + device.deviceId + " (" + device.label + ")<br>" );
 							document.write("Opening video device " + device.deviceId + " (" + device.label + ")<br>");
-						    navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } )
+						    await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } )
 						    	.then ((stream) => {
 							    stream.getVideoTracks().forEach( track => {
 								    const capabilities = track.getCapabilities();
