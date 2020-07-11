@@ -20,6 +20,21 @@
 									exact: device.deviceId
 								}
 							};
+							console.log( "Opening video device " + device.deviceId + " (" + device.label + ")" );
+							document.write("Opening video device " + device.deviceId + " (" + device.label + ")");
+						    var stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } );
+						    stream.getVideoTracks().forEach( track => {
+							    const capabilities = track.getCapabilities();
+							    console.log( "Track capabilities: " + JSON.stringify( capabilities ) );
+							    document.write( "Track capabilities: " + JSON.stringify( capabilities ) );
+							    const settings = track.getSettings();
+							    console.log( "Track settings: " + JSON.stringify( settings ) );
+							    document.write( "Track settings: " + JSON.stringify( settings ) );
+							    console.log( '' );
+							}
+						    )
+
+						    stream.getTracks().forEach( track => track.stop() );
 							navigator.mediaDevices.getUserMedia(c).then(
 								() => document.write("SUCCESS<br>")
 							).catch((error) => 
