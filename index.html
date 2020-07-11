@@ -30,5 +30,13 @@
 				)
 			  )
 		);
+	  
+	  var videoConstraints = { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } };
+	  
+	navigator.mediaDevices.getUserMedia(videoConstraints).then(
+		() => document.write("SUCCESS<br>")
+	).catch((error) => 
+	    document.write("Error: " + error)
+	);
   </script>
 </html>
