@@ -6,27 +6,29 @@
 	  	video: true
 	  };
 	  navigator.mediaDevices.getUserMedia(constraints).then(() =>
-navigator
-	.mediaDevices
-  .enumerateDevices()
-  .then(
-  	devices => devices.forEach(device => {
-		document.write(JSON.stringify(device)));
-		document.write("<br>");
-		if (device.kind == "videoinput") {
-		var c = {
-			video: {
-				exact: device.deviceId
-			}
-		}
-		navigator.mediaDevices.getUserMedia(c).then(
-			document.write("SUCCESS<br>");
-		).catch((error) => {
-		    document.write("Error: " + error)
-		});
-		}
-	}
-  )
-								);
+		navigator
+			.mediaDevices
+  			.enumerateDevices()
+  			.then(
+				devices => devices.forEach(
+					device => {
+						document.write(JSON.stringify(device));
+						document.write("<br>");
+						if (device.kind == "videoinput") {
+							var c = {
+								video: {
+									exact: device.deviceId
+								}
+							};
+							navigator.mediaDevices.getUserMedia(c).then(
+								() => document.write("SUCCESS<br>")
+							).catch((error) => 
+							    document.write("Error: " + error)
+							);
+						}
+					}
+				)
+			  )
+		);
   </script>
 </html>
