@@ -42,7 +42,7 @@
 		  try {
 			    const stream1 = await navigator.mediaDevices.getUserMedia( videoConstraints );
 
-			    stream.getVideoTracks().forEach( track => {
+			    stream1.getVideoTracks().forEach( track => {
 				    const capabilities = track.getCapabilities();
 				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 				    const settings = track.getSettings();
@@ -51,7 +51,7 @@
 				}
 			    )
 
-			    stream.getTracks().forEach( track => track.stop() );
+			    stream1.getTracks().forEach( track => track.stop() );
 			} catch (err) {
 				document.write("Error: " + err + "<br>")
 			}
