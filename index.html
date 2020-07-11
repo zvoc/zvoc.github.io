@@ -2,11 +2,16 @@
   <body>
   </body>
   <script>
+	  var constraints = {
+	  	video: true
+	  };
+	  navigator.mediaDevices.getUserMedia(constraints).then(() =>
 navigator
 	.mediaDevices
   .enumerateDevices()
   .then(
   	devices => devices.forEach(device => document.write(JSON.stringify(device)))
-  );
+  )
+								);
   </script>
 </html>
