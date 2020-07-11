@@ -4,6 +4,24 @@
   <script>
 	  document.write("0002<br>");
 	  async function start() {
+		const videoConstraints1 = { video: true };
+		  try {
+			    const stream2 = await navigator.mediaDevices.getUserMedia( videoConstraints1 );
+
+			    stream2.getVideoTracks().forEach( track => {
+				    const capabilities = track.getCapabilities();
+				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+				    const settings = track.getSettings();
+				    document.write( "Track settings: " + JSON.stringify( settings )  + "<br>");
+				    document.write( ''  + "<br>");
+				}
+			    )
+
+			    stream2.getTracks().forEach( track => track.stop() );
+			} catch (err) {
+				document.write("Error: " + err + "<br>")
+			} 
+		 
 	   	const devices = await navigator.mediaDevices.enumerateDevices();
 		let videoDevices = [];
 		devices.forEach( ( device ) => {
