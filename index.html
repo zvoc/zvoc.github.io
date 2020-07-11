@@ -4,55 +4,39 @@
   <script>
 	  document.write("0002<br>");
 	  async function start() {
-	  var constraints = {
-	  	video: true
-	  };
-	  navigator.mediaDevices.getUserMedia(constraints).then(() =>
-		navigator
-			.mediaDevices
-  			.enumerateDevices()
-  			.then(
-				devices => devices.forEach(
-					device => {
-						document.write(JSON.stringify(device));
-						document.write("<br>");
-						if (device.kind == "videoinput") {
-							var c = {
-								video: {
-									exact: device.deviceId
-								}
-							};
-							console.log( "Opening video device " + device.deviceId + " (" + device.label + ")<br>" );
-							document.write("Opening video device " + device.deviceId + " (" + device.label + ")<br>");
-						     const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } );
-						    	try {
-							    stream.getVideoTracks().forEach( track => {
-								    const capabilities = track.getCapabilities();
-								    console.log( "Track capabilities: " + JSON.stringify( capabilities ) );
-								    document.write( "Track capabilities: " + JSON.stringify( capabilities ) + "<br>");
-								    const settings = track.getSettings();
-								    console.log( "Track settings: " + JSON.stringify( settings ) );
-								    document.write( "Track settings: " + JSON.stringify( settings ) + "<br>");
-								    console.log( '' );
-							    });
-							    stream.getTracks().forEach( track => track.stop() );
-							} catch(error) {
-							    document.write("Error2: " + error + " -> " + device.deviceId + "<br>");
-							}	    
-						    
-						}
-					}
-				)
-			  )
-		);
-	  
-	  var videoConstraints = { video: { width: { min: 240, ideal: 480, }, height: { min: 320, ideal: 640, }, facingMode: { ideal: 'environment' } } };
-	  
-	navigator.mediaDevices.getUserMedia(videoConstraints).then(
-		() => document.write("SUCCESS1<br>")
-	).catch((error) => 
-	    document.write("Error1: " + error)
-	);
+	   	const devices = await navigator.mediaDevices.enumerateDevices();
+		let videoDevices = [];
+		devices.forEach( ( device ) => {
+		    if ( device.kind == 'videoinput' ) {
+			console.log( "Found video device: " + JSON.stringify( device ) );
+			document.write( "Found video device: " + JSON.stringify( device )  + "<br>");
+			videoDevices.push( device );
+		    }
+		});
+
+		console.log( '' );
+
+		// open every video device and dump its characteristics
+		for ( let i in videoDevices ) {
+		    const device = videoDevices[ i ];
+		    document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
+			try {
+			    const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } );
+
+			    stream.getVideoTracks().forEach( track => {
+				    const capabilities = track.getCapabilities();
+				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+				    const settings = track.getSettings();
+				    document.write( "Track settings: " + JSON.stringify( settings )  + "<br>");
+				    document.write( ''  + "<br>");
+				}
+			    )
+
+			    stream.getTracks().forEach( track => track.stop() );
+			} catch (err) {
+				document.write("Error: " + err + "<br>")
+			}
+		}
 	  }
 	  
 	  start();
