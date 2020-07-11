@@ -22,16 +22,21 @@
 							};
 							console.log( "Opening video device " + device.deviceId + " (" + device.label + ")<br>" );
 							document.write("Opening video device " + device.deviceId + " (" + device.label + ")<br>");
-						    var stream = navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } );
-						    stream.getTracks().forEach( track => {
-							    const capabilities = track.getCapabilities();
-							    console.log( "Track capabilities: " + JSON.stringify( capabilities ) );
-							    document.write( "Track capabilities: " + JSON.stringify( capabilities ) + "<br>");
-							    const settings = track.getSettings();
-							    console.log( "Track settings: " + JSON.stringify( settings ) );
-							    document.write( "Track settings: " + JSON.stringify( settings ) + "<br>");
-							    console.log( '' );
-							}
+						    navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } )
+						    	.then ((stream) => {
+							    stream.getVideoTracks().forEach( track => {
+								    const capabilities = track.getCapabilities();
+								    console.log( "Track capabilities: " + JSON.stringify( capabilities ) );
+								    document.write( "Track capabilities: " + JSON.stringify( capabilities ) + "<br>");
+								    const settings = track.getSettings();
+								    console.log( "Track settings: " + JSON.stringify( settings ) );
+								    document.write( "Track settings: " + JSON.stringify( settings ) + "<br>");
+								    console.log( '' );
+							    });
+							    stream.getTracks().forEach( track => track.stop() );
+							}.catch((error) => 
+							    document.write("Error2: " + error)
+							);			    
 						    )
 
 						    stream.getTracks().forEach( track => track.stop() );
