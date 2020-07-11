@@ -31,12 +31,13 @@
 			  )
 		);
 	  
-	  var videoConstraints = { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } };
+	  var videoConstraints = { video: { width: { min: 240, ideal: 480, }, height: { min: 320, ideal: 640, }, facingMode: { ideal: 'environment' } } };
 	  
 	navigator.mediaDevices.getUserMedia(videoConstraints).then(
-		() => document.write("SUCCESS<br>")
+		() => document.write("SUCCESS1<br>")
 	).catch((error) => 
-	    document.write("Error: " + error)
+	    document.write("Error1: " + error)
 	);
+	  
   </script>
 </html>
