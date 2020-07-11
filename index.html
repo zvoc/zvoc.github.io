@@ -23,8 +23,8 @@
 							};
 							console.log( "Opening video device " + device.deviceId + " (" + device.label + ")<br>" );
 							document.write("Opening video device " + device.deviceId + " (" + device.label + ")<br>");
-						     navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } )
-						    	.then ((stream) => {
+						     const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId } } } );
+						    	try {
 							    stream.getVideoTracks().forEach( track => {
 								    const capabilities = track.getCapabilities();
 								    console.log( "Track capabilities: " + JSON.stringify( capabilities ) );
@@ -35,9 +35,9 @@
 								    console.log( '' );
 							    });
 							    stream.getTracks().forEach( track => track.stop() );
-							}).catch((error) => 
-							    document.write("Error2: " + error + " -> " + device.deviceId + "<br>")
-							);			    
+							} catch(error) {
+							    document.write("Error2: " + error + " -> " + device.deviceId + "<br>");
+							}	    
 						    
 						}
 					}
