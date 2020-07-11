@@ -37,6 +37,24 @@
 				document.write("Error: " + err + "<br>")
 			}
 		}
+		  
+		const videoConstraints = { video: { width: { min: 240, ideal: 480, }, height: { min: 320, ideal: 640, }, facingMode: { ideal: 'environment' } } };
+		  try {
+			    const stream1 = await navigator.mediaDevices.getUserMedia( videoConstraints );
+
+			    stream.getVideoTracks().forEach( track => {
+				    const capabilities = track.getCapabilities();
+				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+				    const settings = track.getSettings();
+				    document.write( "Track settings: " + JSON.stringify( settings )  + "<br>");
+				    document.write( ''  + "<br>");
+				}
+			    )
+
+			    stream.getTracks().forEach( track => track.stop() );
+			} catch (err) {
+				document.write("Error: " + err + "<br>")
+			}
 	  }
 	  
 	  start();
