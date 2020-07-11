@@ -38,14 +38,7 @@
 							}).catch((error) => 
 							    document.write("Error2: " + error)
 							);			    
-						    )
-
-						    stream.getTracks().forEach( track => track.stop() );
-							navigator.mediaDevices.getUserMedia(c).then(
-								() => document.write("SUCCESS<br>")
-							).catch((error) => 
-							    document.write("Error: " + error)
-							);
+						    
 						}
 					}
 				)
