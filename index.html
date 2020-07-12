@@ -2,7 +2,54 @@
   <body>
   </body>
   <script>
+  const backCameraKeywords = [
+    "rear",
+    "back",
+    "rück",
+    "arrière",
+    "trasera",
+    "trás",
+    "traseira",
+    "posteriore",
+    "后面",
+    "後面",
+    "背面",
+    "后置", // alternative
+    "後置", // alternative
+    "背置", // alternative
+    "задней",
+    "الخلفية",
+    "후",
+    "arka",
+    "achterzijde",
+    "หลัง",
+    "baksidan",
+    "bagside",
+    "sau",
+    "bak",
+    "tylny",
+    "takakamera",
+    "belakang",
+    "אחורית",
+    "πίσω",
+    "spate",
+    "hátsó",
+    "zadní",
+    "darrere",
+    "zadná",
+    "задня",
+    "stražnja",
+    "belakang",
+    "बैक",
+  ];
 	  
+  function isBackCameraLabel(label) {
+    const lowercaseLabel = label.toLowerCase();
+
+    return backCameraKeywords.some((keyword) => {
+      return lowercaseLabel.includes(keyword);
+    });
+  }
     /**
    * @hidden
    *
@@ -47,8 +94,8 @@
   async function getBestCamera(idealWidth, idealHeight) {
 
     try {
-      const stream2 = await navigator.mediaDevices.getUserMedia( { video: true } );
-      stream2.getTracks().forEach( track => track.stop() );
+      const stream = await navigator.mediaDevices.getUserMedia( { video: true } );
+      stream.getTracks().forEach( track => track.stop() );
     } catch (err) {
       mapNonStandardErrorName(err);
       handleGetUserMediaError(err);
@@ -71,9 +118,13 @@
         const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { ideal: idealWidth }, height: { ideal: idealHeight }, facingMode: { ideal: 'environment' } } } );
 
         let track = stream.getVideoTracks()[0];
-        const capabilities = track.getCapabilities();
+        let capabilities;
+	      
+	if (typeof track.getCapabilities === "function") {
+	    capabilities = track.getCapabilities();  
+	}
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-        if (capabilities.facingMode.length === 0 || capabilities.facingMode[0] === 'environment' ) {
+        if ( capabilities?.facingMode[0] === 'environment' || (device.label != undefined && isBackCameraLabel(device.label))) {
           cameraFound( stream );
           return;
         }
@@ -89,7 +140,11 @@
         const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { ideal: idealWidth }, height: { ideal: idealHeight }, facingMode: { ideal: 'environment' } } } );
 
         let track = stream.getVideoTracks()[0];
-        const capabilities = track.getCapabilities();
+        let capabilities;
+	      
+	if (typeof track.getCapabilities === "function") {
+	    capabilities = track.getCapabilities();  
+	}
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
       
         cameraFound( stream );
