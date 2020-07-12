@@ -31,7 +31,7 @@
         let track = stream.getVideoTracks()[0];
         const capabilities = track.getCapabilities();
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-        if (capabilities.facingMode[0] === '' || capabilities.facingMode[0] === 'environment' ) {
+        if (capabilities.facingMode.length === 0 || capabilities.facingMode[0] === 'environment' ) {
           cameraFound( stream );
           return;
         }
@@ -49,10 +49,9 @@
         let track = stream.getVideoTracks()[0];
         const capabilities = track.getCapabilities();
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-        if (capabilities.facingMode[0] === '' || capabilities.facingMode[0] === 'environment' ) {
-          cameraFound( stream );
-          return;
-        }
+      
+        cameraFound( stream );
+        return;
       } catch (err) {
         handleGetUserMediaError(err);
       }
@@ -64,7 +63,7 @@
   }
 
   function cameraFound( stream ) {
-
+    document.write("FOUND");
   }
 	  
   getBestCamera(640, 480)
