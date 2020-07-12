@@ -1,5 +1,6 @@
 <html>
   <body>
+	  <video id="video"></video>
   </body>
   <script>
   const backCameraKeywords = [
@@ -91,55 +92,28 @@
     });
   }
 
-  async function getBestCamera(idealWidth, idealHeight) {
-	  
-    document.write("1<br>");
+  async function getBestCamera() {	  
 
-    /*try {
-      const stream = await navigator.mediaDevices.getUserMedia( { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
-	    document.write("2<br>");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia( { video: true} );
       stream.getTracks().forEach( track => track.stop() );
     } catch (err) {
       mapNonStandardErrorName(err);
       handleGetUserMediaError(err);
       return;
-    }*/
-    try {
+    }
+	  
     const devices = await navigator.mediaDevices.enumerateDevices();
     let videoDevices = [];
-	    document.write("3<br>");
     devices.forEach( ( device ) => {
       if ( device.kind == 'videoinput' ) {
         document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
 	console.log (JSON.stringify( device ));
         videoDevices.push( device );
       }
-    });
-	    
-    if (videoDevices.length > 0) {
-      if (videoDevices[0].deviceId == undefined) {
-      	try {
-	      const stream = await navigator.mediaDevices.getUserMedia( { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
-		    document.write("2<br>");
-	      stream.getTracks().forEach( track => track.stop() );
-	    } catch (err) {
-	      mapNonStandardErrorName(err);
-	      handleGetUserMediaError(err);
-	      return;
-	    }
-	      const devices1 = await navigator.mediaDevices.enumerateDevices();
-	      devices1.forEach( ( device ) => {
-		      if ( device.kind == 'videoinput' ) {
-			document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
-			console.log (JSON.stringify( device ));
-			videoDevices.push( device );
-		      }
-		    });
-      }
-    }
+    });	   
 
     for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
-	    document.write("4<br>");
       const device = videoDevices[ i ];
       document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
       try {
@@ -154,38 +128,12 @@
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 	console.log( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 	      
-        if ( capabilities == undefined || capabilities != undefined && capabilities.facingMode[0] === 'environment' || (device.label != undefined && isBackCameraLabel(device.label))) {
-          cameraFound( stream );
-          return;
-        }
-	stream.getTracks().forEach( track => track.stop() );
-      } catch (err) {
-        handleGetUserMediaError(err);
-      }
-    }
-
-    for ( let i = 0; i < videoDevices.length; i-- ) {
-      const device = videoDevices[ i ];
-      document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { ideal: idealWidth }, height: { ideal: idealHeight }, facingMode: { ideal: 'environment' } } } );
-
-        let track = stream.getVideoTracks()[0];
-        let capabilities;
-	      
-	if (typeof track.getCapabilities === "function") {
-	    capabilities = track.getCapabilities();  
-	}
-        document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-      
+        
         cameraFound( stream );
-        return;
+	return;
       } catch (err) {
         handleGetUserMediaError(err);
       }
-    }
-    } catch (err) {
-      handleGetUserMediaError(err);
     }
   }
 
@@ -195,9 +143,12 @@
 
   function cameraFound( stream ) {
     document.write("FOUND");
+    let video = document.querySelectorAll("#video")[0];
+    video.srcObject = stream;
+    video.play();
   }
 	  
-  getBestCamera(640, 480)
+  getBestCamera()
 	  
   </script>
 </html>
