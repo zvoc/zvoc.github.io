@@ -39,7 +39,7 @@
 		    const device = videoDevices[ i ];
 		    document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
 			try {
-			    const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { ideal: 240, }, height: { ideal: 320, }, facingMode: { ideal: 'environment' } } } );
+			    const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { exact: 240, }, height: { exact: 320, }, facingMode: { ideal: 'environment' } } } );
 
 			    stream.getVideoTracks().forEach( track => {
 				    const capabilities = track.getCapabilities();
