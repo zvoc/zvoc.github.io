@@ -56,7 +56,7 @@
 			}
 		}
 		  
-		const videoConstraints = { video: { width: { min: 240, ideal: 480, }, height: { min: 320, ideal: 640, }, facingMode: { ideal: 'environment' } } };
+		const videoConstraints = { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } };
 		  try {
 			    const stream1 = await navigator.mediaDevices.getUserMedia( videoConstraints );
 
