@@ -2,80 +2,72 @@
   <body>
   </body>
   <script>
-	  document.write("0002<br>");
-	  async function start() {
-		const videoConstraints1 = { video: true };
-		  try {
-			    const stream2 = await navigator.mediaDevices.getUserMedia( videoConstraints1 );
+  async function getBestCamera(idealWidth, idealHeight) {
 
-			    stream2.getVideoTracks().forEach( track => {
-				    const capabilities = track.getCapabilities();
-				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-				    const settings = track.getSettings();
-				    document.write( "Track settings: " + JSON.stringify( settings )  + "<br>");
-				    document.write( ''  + "<br>");
-				}
-			    )
+    try {
+      const stream2 = await navigator.mediaDevices.getUserMedia( { video: true } );
+      stream2.getTracks().forEach( track => track.stop() );
+    } catch (err) {
+      mapNonStandardErrorName(err);
+      handleGetUserMediaError(err);
+      return;
+    }
 
-			    stream2.getTracks().forEach( track => track.stop() );
-			} catch (err) {
-				document.write("Error: " + err + "<br>")
-			} 
-		 
-	   	const devices = await navigator.mediaDevices.enumerateDevices();
-		let videoDevices = [];
-		devices.forEach( ( device ) => {
-		    if ( device.kind == 'videoinput' ) {
-			console.log( "Found video device: " + JSON.stringify( device ) );
-			document.write( "Found video device: " + JSON.stringify( device )  + "<br>");
-			videoDevices.push( device );
-		    }
-		});
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    let videoDevices = [];
+    devices.forEach( ( device ) => {
+      if ( device.kind == 'videoinput' ) {
+        document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
+        videoDevices.push( device );
+      }
+    });
 
-		console.log( '' );
+    for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
+      const device = videoDevices[ i ];
+      document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { ideal: idealWidth }, height: { ideal: idealHeight }, facingMode: { ideal: 'environment' } } } );
 
-		// open every video device and dump its characteristics
-		for ( let i in videoDevices ) {
-		    const device = videoDevices[ i ];
-		    document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
-			try {
-			    const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { exact: 240, }, height: { exact: 320, }, facingMode: { ideal: 'environment' } } } );
+        let track = stream.getVideoTracks()[0];
+        const capabilities = track.getCapabilities();
+        document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+        if (capabilities.facingMode[0] === '' || capabilities.facingMode[0] === 'environment' ) {
+          cameraFound( stream );
+          return;
+        }
+      } catch (err) {
+        handleGetUserMediaError(err);
+      }
+    }
 
-			    stream.getVideoTracks().forEach( track => {
-				    const capabilities = track.getCapabilities();
-				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-				    const settings = track.getSettings();
-				    document.write( "Track settings: " + JSON.stringify( settings )  + "<br>");
-				    document.write( ''  + "<br>");
-				}
-			    )
+    for ( let i = 0; i < videoDevices.length; i-- ) {
+      const device = videoDevices[ i ];
+      document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { ideal: idealWidth }, height: { ideal: idealHeight }, facingMode: { ideal: 'environment' } } } );
 
-			    stream.getTracks().forEach( track => track.stop() );
-			} catch (err) {
-				document.write("Error: " + err + "<br>")
-			}
-		}
-		  
-		const videoConstraints = { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } };
-		  try {
-			    const stream1 = await navigator.mediaDevices.getUserMedia( videoConstraints );
+        let track = stream.getVideoTracks()[0];
+        const capabilities = track.getCapabilities();
+        document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+        if (capabilities.facingMode[0] === '' || capabilities.facingMode[0] === 'environment' ) {
+          cameraFound( stream );
+          return;
+        }
+      } catch (err) {
+        handleGetUserMediaError(err);
+      }
+    }
+  }
 
-			    stream1.getVideoTracks().forEach( track => {
-				    const capabilities = track.getCapabilities();
-				    document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
-				    const settings = track.getSettings();
-				    document.write( "Track settings: " + JSON.stringify( settings )  + "<br>");
-				    document.write( ''  + "<br>");
-				}
-			    )
+  function handleGetUserMediaError(err) {
+    document.write("Get user media error: " + err.name + " - " + err.message + "<br>");
+  }
 
-			    stream1.getTracks().forEach( track => track.stop() );
-			} catch (err) {
-				document.write("Error: " + err + "<br>")
-			}
-	  }
+  function cameraFound( stream ) {
+
+  }
 	  
-	  start();
+  getBestCamera(640, 480)
 	  
   </script>
 </html>
