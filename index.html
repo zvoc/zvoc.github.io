@@ -95,7 +95,7 @@
 	  
     document.write("1<br>");
 
-    try {
+    /*try {
       const stream = await navigator.mediaDevices.getUserMedia( { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
 	    document.write("2<br>");
       stream.getTracks().forEach( track => track.stop() );
@@ -103,7 +103,7 @@
       mapNonStandardErrorName(err);
       handleGetUserMediaError(err);
       return;
-    }
+    }*/
     try {
     const devices = await navigator.mediaDevices.enumerateDevices();
     let videoDevices = [];
@@ -115,6 +115,28 @@
         videoDevices.push( device );
       }
     });
+	    
+    if (videoDevices.length > 0) {
+      if (videoDevices[0].deviceId == undefined) {
+      	try {
+	      const stream = await navigator.mediaDevices.getUserMedia( { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
+		    document.write("2<br>");
+	      stream.getTracks().forEach( track => track.stop() );
+	    } catch (err) {
+	      mapNonStandardErrorName(err);
+	      handleGetUserMediaError(err);
+	      return;
+	    }
+	      const devices1 = await navigator.mediaDevices.enumerateDevices();
+	      devices1.forEach( ( device ) => {
+		      if ( device.kind == 'videoinput' ) {
+			document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
+			console.log (JSON.stringify( device ));
+			videoDevices.push( device );
+		      }
+		    });
+      }
+    }
 
     for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
 	    document.write("4<br>");
