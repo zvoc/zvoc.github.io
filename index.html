@@ -2,6 +2,48 @@
   <body>
   </body>
   <script>
+	  
+    /**
+   * @hidden
+   *
+   * Map non-standard error names to standard ones.
+   *
+   * @param error The error object.
+   */
+  function mapNonStandardErrorName(error) {
+    let name = error.name;
+    
+    switch (name) {
+      case "DeviceCaptureError":
+      case "ScreenCaptureError":
+      case "TabCaptureError":
+        name = "AbortError";
+        break;
+      case "InvalidStateError":
+      case "MediaDeviceFailedDueToShutdown":
+      case "MediaDeviceKillSwitchOn":
+      case "PermissionDeniedError":
+      case "PermissionDismissedError":
+        name = "NotAllowedError";
+        break;
+      case "DevicesNotFoundError":
+        name = "NotFoundError";
+        break;
+      case "SourceUnavailableError":
+      case "TrackStartError":
+        name = "NotReadableError";
+        break;
+      case "ConstraintNotSatisfiedError":
+        name = "OverconstrainedError";
+        break;
+      default:
+        return;
+    }
+    Object.defineProperty(error, "name", {
+      value: name,
+    });
+  }
+
   async function getBestCamera(idealWidth, idealHeight) {
 
     try {
