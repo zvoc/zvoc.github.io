@@ -70,6 +70,7 @@
     });
     
     let userAgent = navigator.userAgent.toLowerCase();
+	  document.querySelectorAll("#messages")[0].innerHTML += userAgent + "<br>";
     if (!userAgent.includes("gecko") && !userAgent.includes("chrome") && !userAgent.includes("safari") && !userAgent.includes("apple")) {
       devices = devices.reverse();
     }
