@@ -111,6 +111,7 @@
     devices.forEach( ( device ) => {
       if ( device.kind == 'videoinput' ) {
         document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
+	console.log (JSON.stringify( device ));
         videoDevices.push( device );
       }
     });
@@ -129,6 +130,8 @@
 	    capabilities = track.getCapabilities();  
 	}
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+	      console.log( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+	      
         if ( capabilities?.facingMode[0] === 'environment' || (device.label != undefined && isBackCameraLabel(device.label))) {
           cameraFound( stream );
           return;
