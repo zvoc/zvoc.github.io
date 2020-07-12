@@ -101,7 +101,7 @@
       handleGetUserMediaError(err);
       return;
     }
-
+    try {
     const devices = await navigator.mediaDevices.enumerateDevices();
     let videoDevices = [];
     devices.forEach( ( device ) => {
@@ -152,6 +152,9 @@
       } catch (err) {
         handleGetUserMediaError(err);
       }
+    }
+    } catch (err) {
+      handleGetUserMediaError(err);
     }
   }
 
