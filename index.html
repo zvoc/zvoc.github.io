@@ -132,7 +132,7 @@
         document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 	      console.log( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 	      
-        if ( capabilities?.facingMode[0] === 'environment' || (device.label != undefined && isBackCameraLabel(device.label))) {
+        if ( capabilities != undefined && capabilities.facingMode[0] === 'environment' || (device.label != undefined && isBackCameraLabel(device.label))) {
           cameraFound( stream );
           return;
         }
