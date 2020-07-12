@@ -1,5 +1,6 @@
 <html>
   <body>
+	  <div id="messages"></div>
 	  <video id="video"></video>
   </body>
   <script>
@@ -107,7 +108,7 @@
     let videoDevices = [];
     devices.forEach( ( device ) => {
       if ( device.kind == 'videoinput' ) {
-        document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
+        document.querySelectorAll("#messages")[0] += "Found video device: " + JSON.stringify( device ) + "<br>";
 	console.log (JSON.stringify( device ));
         videoDevices.push( device );
       }
@@ -115,7 +116,7 @@
 
     for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
       const device = videoDevices[ i ];
-      document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
+      document.querySelectorAll("#messages")[0] += "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>";
       try {
         const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
 
@@ -125,7 +126,7 @@
 	if (typeof track.getCapabilities === "function") {
 	    capabilities = track.getCapabilities();  
 	}
-        document.write( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+        document.querySelectorAll("#messages")[0] += "Track capabilities: " + JSON.stringify( capabilities )  + "<br>";
 	console.log( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 	      
         
@@ -138,11 +139,11 @@
   }
 
   function handleGetUserMediaError(err) {
-    document.write("Get user media error: " + err.name + " - " + err.message + "<br>");
+    document.querySelectorAll("#messages")[0] += "Get user media error: " + err.name + " - " + err.message + "<br>";
   }
 
   function cameraFound( stream ) {
-    document.write("FOUND");
+    document.querySelectorAll("#messages")[0] += "FOUND";
     let video = document.querySelectorAll("#video")[0];
     video.srcObject = stream;
     video.play();
