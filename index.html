@@ -96,7 +96,7 @@
     document.write("1<br>");
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia( { video: true } );
+      const stream = await navigator.mediaDevices.getUserMedia( { video: { width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
 	    document.write("2<br>");
       stream.getTracks().forEach( track => track.stop() );
     } catch (err) {
