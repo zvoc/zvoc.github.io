@@ -126,7 +126,7 @@
 	if (typeof track.getCapabilities === "function") {
 	    capabilities = track.getCapabilities();  
 	}
-        document.querySelectorAll("#messages")[0] += "Track capabilities: " + JSON.stringify( capabilities )  + "<br>";
+        document.querySelectorAll("#messages")[0].innerHTML += "Track capabilities: " + JSON.stringify( capabilities )  + "<br>";
 	console.log( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
 	      
         
