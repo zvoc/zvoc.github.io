@@ -92,9 +92,12 @@
   }
 
   async function getBestCamera(idealWidth, idealHeight) {
+	  
+    document.write("1<br>");
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia( { video: true } );
+	    document.write("2<br>");
       stream.getTracks().forEach( track => track.stop() );
     } catch (err) {
       mapNonStandardErrorName(err);
@@ -104,6 +107,7 @@
     try {
     const devices = await navigator.mediaDevices.enumerateDevices();
     let videoDevices = [];
+	    document.write("3<br>");
     devices.forEach( ( device ) => {
       if ( device.kind == 'videoinput' ) {
         document.write( "Found video device: " + JSON.stringify( device ) + "<br>" );
@@ -112,6 +116,7 @@
     });
 
     for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
+	    document.write("4<br>");
       const device = videoDevices[ i ];
       document.write( "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>");
       try {
