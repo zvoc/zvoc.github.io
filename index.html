@@ -5,21 +5,39 @@
 <div id="output"></div>
 <script>
 	function testDown(event) {
+		var ele = document.getElementById("output");
+		var text = document.createTextNode(" --- Down: " + event.which + " - " + event.keyCode);
+		ele.appendChild(text);
 		console.log("Down: " + event.which + " - " + event.keyCode);
 	}
 	function testUp(event) {
+		var ele = document.getElementById("output");
+		var text = document.createTextNode(" --- Up: " + event.which + " - " + event.keyCode);
+		ele.appendChild(text);
 		console.log("Up: " + event.which + " - " + event.keyCode);
 	}
 	function testPress(event) {
+		var ele = document.getElementById("output");
+		var text = document.createTextNode(" --- Press: " + event.which + " - " + event.keyCode);
+		ele.appendChild(text);
 		console.log("Press: " + event.which + " - " + event.keyCode);
 	}
 	function testInput(event) {
+		var ele = document.getElementById("output");
+		var text = document.createTextNode(" --- Input: " + event.which + " - " + event.keyCode);
+		ele.appendChild(text);
 		console.log("Input: " + event.which + " - " + event.keyCode);
 	}
 	function testTextInput(event) {
+		var ele = document.getElementById("output");
+		var text = document.createTextNode(" --- Text input: " + event.which + " - " + event.keyCode);
+		ele.appendChild(text);
 		console.log("Text input: " + event.which + " - " + event.keyCode);
 	}
 	function testChange(event) {
+		var ele = document.getElementById("output");
+		var text = document.createTextNode(" --- Change: " + event.which + " - " + event.keyCode);
+		ele.appendChild(text);
 		console.log("Change: " + event.which + " - " + event.keyCode);
 	}
 </script>
