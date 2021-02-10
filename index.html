@@ -1,45 +1,118 @@
 <html>
+  <body>
+	  <a href="googlechromes://www.identyum.com/"> LINK </a>
+	  <div id="messages"></div>
+	  <video id="video"></video>
+  </body>
+  <script>
+  
+	  
+ 
+    /**
+   * @hidden
+   *
+   * Map non-standard error names to standard ones.
+   *
+   * @param error The error object.
+   */
+  function mapNonStandardErrorName(error) {
+    let name = error.name;
+    
+    switch (name) {
+      case "DeviceCaptureError":
+      case "ScreenCaptureError":
+      case "TabCaptureError":
+        name = "AbortError";
+        break;
+      case "InvalidStateError":
+      case "MediaDeviceFailedDueToShutdown":
+      case "MediaDeviceKillSwitchOn":
+      case "PermissionDeniedError":
+      case "PermissionDismissedError":
+        name = "NotAllowedError";
+        break;
+      case "DevicesNotFoundError":
+        name = "NotFoundError";
+        break;
+      case "SourceUnavailableError":
+      case "TrackStartError":
+        name = "NotReadableError";
+        break;
+      case "ConstraintNotSatisfiedError":
+        name = "OverconstrainedError";
+        break;
+      default:
+        return;
+    }
+    Object.defineProperty(error, "name", {
+      value: name,
+    });
+  }
 
-<body>
-<input onkeydown="testDown(event)" onkeyup="testUp(event)" onkeypress="testPress(event)" oninput="testInput(event)" inputtext="testTextInput(event)" onchange="testChange(event)"/>
-<div id="output"></div>
-<script>
-	function testDown(event) {
-		var ele = document.getElementById("output");
-		var text = document.createTextNode(" --- Down: " + event.which + " - " + event.keyCode);
-		ele.appendChild(text);
-		console.log("Down: " + event.which + " - " + event.keyCode);
+  async function getBestCamera() {	  
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia( { video: true} );
+      stream.getTracks().forEach( track => track.stop() );
+    } catch (err) {
+      mapNonStandardErrorName(err);
+      handleGetUserMediaError(err);
+      return;
+    }
+	  
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    let videoDevices = [];
+    devices.forEach( ( device ) => {
+      if ( device.kind == 'videoinput' ) {
+        document.querySelectorAll("#messages")[0].innerHTML += "Found video device: " + JSON.stringify( device ) + "<br>";
+	console.log (JSON.stringify( device ));
+        videoDevices.push( device );
+      }
+    });
+    
+    let userAgent = navigator.userAgent.toLowerCase();
+	  document.querySelectorAll("#messages")[0].innerHTML += userAgent + "<br>";
+    if (!userAgent.includes("chrome") && !userAgent.includes("safari") && !userAgent.includes("apple")) {
+      videoDevices = videoDevices.reverse();
+    }
+
+    //for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
+    for ( let i = 0; i < videoDevices.length; i++ ) {
+      const device = videoDevices[ i ];
+      document.querySelectorAll("#messages")[0].innerHTML += "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>";
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
+
+        let track = stream.getVideoTracks()[0];
+        let capabilities;
+	      
+	if (typeof track.getCapabilities === "function") {
+	    capabilities = track.getCapabilities();  
 	}
-	function testUp(event) {
-		var ele = document.getElementById("output");
-		var text = document.createTextNode(" --- Up: " + event.which + " - " + event.keyCode);
-		ele.appendChild(text);
-		console.log("Up: " + event.which + " - " + event.keyCode);
-	}
-	function testPress(event) {
-		var ele = document.getElementById("output");
-		var text = document.createTextNode(" --- Press: " + event.which + " - " + event.keyCode);
-		ele.appendChild(text);
-		console.log("Press: " + event.which + " - " + event.keyCode);
-	}
-	function testInput(event) {
-		var ele = document.getElementById("output");
-		var text = document.createTextNode(" --- Input: " + event.which + " - " + event.keyCode);
-		ele.appendChild(text);
-		console.log("Input: " + event.which + " - " + event.keyCode);
-	}
-	function testTextInput(event) {
-		var ele = document.getElementById("output");
-		var text = document.createTextNode(" --- Text input: " + event.which + " - " + event.keyCode);
-		ele.appendChild(text);
-		console.log("Text input: " + event.which + " - " + event.keyCode);
-	}
-	function testChange(event) {
-		var ele = document.getElementById("output");
-		var text = document.createTextNode(" --- Change: " + event.which + " - " + event.keyCode);
-		ele.appendChild(text);
-		console.log("Change: " + event.which + " - " + event.keyCode);
-	}
-</script>
-</body>
+        document.querySelectorAll("#messages")[0].innerHTML += "Track capabilities: " + JSON.stringify( capabilities )  + "<br>";
+	console.log( "Track capabilities: " + JSON.stringify( capabilities )  + "<br>");
+	      
+        
+        cameraFound( stream );
+	return;
+      } catch (err) {
+        handleGetUserMediaError(err);
+      }
+    }
+  }
+
+  function handleGetUserMediaError(err) {
+    document.querySelectorAll("#messages")[0].innerHTML += "Get user media error: " + err.name + " - " + err.message + "<br>";
+  }
+
+  function cameraFound( stream ) {
+    document.querySelectorAll("#messages")[0].innerHTML += "FOUND";
+    let video = document.querySelectorAll("#video")[0];
+    video.srcObject = stream;
+    video.play();
+  }
+	  
+  getBestCamera()
+	  
+  </script>
 </html>
