@@ -76,12 +76,12 @@
       videoDevices = videoDevices.reverse();
     }
 
-    //for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
-    for ( let i = 0; i < videoDevices.length; i++ ) {
+    for ( let i = videoDevices.length - 1; i >= 0; i-- ) {
+    //for ( let i = 0; i < videoDevices.length; i++ ) {
       const device = videoDevices[ i ];
       document.querySelectorAll("#messages")[0].innerHTML += "Opening video device " + device.deviceId + " (" + device.label + ")"  + "<br>";
       try {
-        const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId }, width: { min: 320, ideal: 640, }, height: { min: 240, ideal: 480, }, facingMode: { ideal: 'environment' } } } );
+        const stream = await navigator.mediaDevices.getUserMedia( { video: { deviceId: { exact: device.deviceId },width: { min: 640, ideal: 1280, }, height: { min: 480, ideal: 720, }, facingMode: { ideal: 'environment' } } } );
 
         let track = stream.getVideoTracks()[0];
         let capabilities;
